@@ -1,0 +1,9 @@
+thisset={"apple","peach","cherry","banana"}
+thisset2={"peach","cow","cat","dog"}
+print(thisset)
+thisset.add("apricot")
+print(thisset)
+thisset.remove("apple")
+print(thisset)
+z=thisset2.difference(thisset)
+print(z)
