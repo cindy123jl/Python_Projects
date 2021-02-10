@@ -32,6 +32,22 @@ class Member(Band):
             print("Welcome back, {} member!".format(entry_bandName))
         else:
             print("The pin or email is incorrect")
+            
+class drinks(Band):
+    location = "Cafe Shoppe"
+    access_number = "4442"
+    
+#has the same methods to the parent class except the location and access
+#number is added to gain acess orders to Cafe Shoppe
+    def getLoginInfo(self):
+        entry_bandName = input("Enter your band name: ")
+        entry_email = input("Enter you bands email: ")
+        entry_access = input("Enter access number for access to drink orders: ")
+        if (entry_email == self.email and entry_access == self.access_number):
+            print("Welcome back, {} member!".format(entry_bandName))
+        else:
+            print("Try again. The email or access number is incorrect")
+    
 
 #The following code invokes the methods inside each class for the Band and Member
 
@@ -40,6 +56,9 @@ band.getLoginInfo()
 
 member = Member()
 member.getLoginInfo()
+
+drinks = drinks()
+drinks.getLoginInfo()
         
 
         
