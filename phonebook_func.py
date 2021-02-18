@@ -110,7 +110,107 @@ def addToList(self):
                 self.lstList1.insert(END, var_fullname)#update listbox with the new function
                 onClear(self)#call the function to clear all of the textboxes
             else:
-                messagebox.
-                           
-                              
+                messagebox.showerror("Missing Text Error","Please ensure that there is data in all four fields.")
+
+def onDelete(self):
+    var_select = self.lstList1.get(self.lstList1.curselection()) #listbox's selcetde value
+    conn = sqlite3.connect('phonebook.db')
+    with conn:
+        cur = conn.cursor()
+        #check count to ensure that this is not the last record in the database
+        #the database... cannot delete last record or we will get error
+        cur.execute("""SELECT COUNT(*) FROM tbl_phonebook""")
+        count = cur.fetchone()[0]
+        if count > 1:
+            confirm = messagebox.askokcancel("Delete Confirmation", "All information associated with, ({}) \nwill permantely deleted from the database. \n\nProceed with the deletion request?".format(var_select))
+            if confirm:
+                conn = sqlite3.connect('phonebook.db')
+                with conn:
+                    cursor = conn.cursor()
+                    cursor.execute("""DELETE FROM tbl_phonebook WHERE col_fullname = '()' """.format(var_select))
+                onDeleted(self) # call the function to clear all of the textboxes and the selected index of listbox
+######             onRefresh(self) # update the listbox of the changes
+                conn.commit()
+            else:
+                confirm = messagebox.showerror("Last Record Error", "({}) is the last record in the database and cannot be deleted at this tine")
+        conn.close()
+    
+    def onDeleted(self):
+        #clear the text in these textboxes
+        self.txt_fname.delete(0,END)
+        self.txt_lname.delete(0,END)
+        self.txt_phone.delete(0,END)
+        self.txt_email.delete(0,END)
+    ##      onRefresh(self)  #update the listbox of the changes
+        try:
+            index = self.lstList1.curselection()[0]
+            self.lstList1.delete(index)
+        except IndexError:
+            pass
+
+    def onClear(self):
+        # clear the text in these textboxes
+        self.txt_fname.delete(0,END)
+        self.txt_lname.delete(0,END)
+        self.txt_phone.delete(0,END)
+        self.txt_email.delete(0,END)
+
+    def onRefresh(self):
+        #populate the listbox, coinciding with the database
+        self.lstList1.delete(0,END)
+        conn = sqlite3.connect('phonebook.db')
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("""SELECT COUNT(*) FROM tbl_phonebook""")
+            count = cursor.fetchone()[0]
+            i = 0
+            while i < count:
+                cursor.execute("""SELECT col_fullname FROM tbl_phonebook""")
+                varList = cursor.fetchall()[i]
+                for item in varList:
+                    self.lstList1.insert(0,str(item))
+                    i = i + i
+        conn.close()
+
+    def onUpdate(self):
+        try:
+            var_select = self.lstList1.curselection() [0] #index of the list selection
+            var_value = self.lstList1.get(var_select) #list selection's text value
+        except:
+            messagebox.showinfo("Missing selection","No name was selected from the list box.  \nCancelling the Update request.")
+            return
+        # the user will only be allowed to update changes fro phone and emails.
+        # for name changes, the user will need to delete the entire record and start over
+        var_phone = self.txt_phone.get().strip() #normalize the data to maintain databse integerity
+        var_email = self.txt_email.get().strip()
+        if (len(var_phone) > 0) and (len(var_email) > 0): #ensure that there is data present
+            conn = sqlite3.connect('phonebook.db')
+            with conn:
+                cur = conn.cursor()
+                #count records to see if the user's changes are already in
+                #the database...meaning, thare are no changed to update.
+                cur.execute("""SELECT COUNT(col_phone) FROM tbl_phonebook WHERE col_phone = '()'""".format(var_phone))
+                count = cur.fetchone()[0]
+                print(count)
+                cur.execute("""SELECT COUNT(col_email) FROM tbl_phonebook WHERE col_email = '()'""".format(var_email))
+                count2 = cur.fetchone ()[0]
+                print(count2)
+                if count == 0 or count2 == 0; # if proposed changes are not already in the database, than proceed
+                    response = messagebox.askokcancel("Update Request","The following changes ({}) and ({}) will be implemented for ({}). \n")
+                    print(response)
+                    if response:
+                        with conn:
+                            cursor = conn.cursor()
+                            cursor.execute("""UPDATE tbl_phonebook SET col_phone = '(0)', col_email ='(1) WHERE col_fullname = '(2)'""".format(var_phone, var_email, var_value))
+                            onClear(self)
+                            conn.commit()
+                    else:
+                        messagebox.showinfo("Cancel request","No changes have been made to ({}).".format(var_value))
+                else:
+                    messagebox.showinfo("No changes detected","Both ({}) and ({}) \nalready exist in the database foe this name. \n\n")
+                onClear(self)
+            conn.close()
+        else:
+            messagebox.showerror("Missing information", "Please select a name from the list")       
+        onClear(self)                     
          
