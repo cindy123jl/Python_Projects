@@ -5,6 +5,6 @@
  # Projects
  
  
-*[Python project full functioning website](https://github.com/cindy123jl/Python_Projects/tree/main/DjangoCheckbookProject)
+[Python project full functioning website](https://github.com/cindy123jl/Python_Projects/tree/main/DjangoCheckbookProject)
 
-*[Phonebook project](https://github.com/cindy123jl/Python_Projects/blob/main/phonebook_main.py)
+[Phonebook project](https://github.com/cindy123jl/Python_Projects/blob/main/phonebook_main.py)
