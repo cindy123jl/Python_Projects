@@ -11,7 +11,7 @@
 
 ## Python project full functioning website:
 
-This is a full functioning website using the Django framework. 
+This is a full functioning website using the Django framework. It is has checkbook with some functions.
 
 ## Phonebook project
 
